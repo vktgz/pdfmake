@@ -149,12 +149,6 @@ TableProcessor.prototype.beginRow = function (rowIndex, writer) {
 TableProcessor.prototype.drawHorizontalLine = function (lineIndex, writer, overrideY) {
 	var lineWidth = this.layout.hLineWidth(lineIndex, this.tableNode);
 	if (lineWidth) {
-		var style = this.layout.hLineStyle(lineIndex, this.tableNode);
-		var dash;
-		if (style && style.dash) {
-			dash = style.dash;
-		}
-
 		var offset = lineWidth / 2;
 		var currentLine = null;
 		var body = this.tableNode.table.body;
@@ -166,6 +160,11 @@ TableProcessor.prototype.drawHorizontalLine = function (lineIndex, writer, overr
 			var data = this.rowSpanData[i];
 			var shouldDrawLine = !data.rowSpan;
 			var borderColor = null;
+			var style = this.layout.hLineStyle(lineIndex, this.tableNode, i);
+			var dash = null;
+			if (style && style.dash) {
+				dash = style.dash;
+			}
 
 			// draw only if the current cell requires a top border or the cell in the
 			// row above requires a bottom border
@@ -264,7 +263,7 @@ TableProcessor.prototype.drawVerticalLine = function (x, y0, y1, vLineColIndex, 
 	if (width === 0) {
 		return;
 	}
-	var style = this.layout.vLineStyle(vLineColIndex, this.tableNode);
+	var style = this.layout.vLineStyle(vLineRowIndex, this.tableNode, vLineColIndex);
 	var dash;
 	if (style && style.dash) {
 		dash = style.dash;
